@@ -1,3 +1,6 @@
+workspace = { members = ["macros"] }
+
+
 [package]
 name = "bevy_test_helper"
 version = "0.1.0"
@@ -7,6 +10,7 @@ edition = "2021"
 [dependencies]
 bevy = { version = "0.13.1", default-features = false }
 serde = { version = "1.0.197", features = ["derive"], optional = true }
+bevy_test_helper_macro_impl = { path = "macros" }
 
 [features]
 default = []

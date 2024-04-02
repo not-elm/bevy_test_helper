@@ -352,7 +352,17 @@ name = "bevy_test_helper"
 version = "0.1.0"
 dependencies = [
  "bevy",
+ "bevy_test_helper_macro_impl",
  "serde",
+]
+
+[[package]]
+name = "bevy_test_helper_macro_impl"
+version = "0.1.0"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
 ]
 
 [[package]]
