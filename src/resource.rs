@@ -29,11 +29,6 @@ pub trait DirectResourceControl {
     fn assert_resource<R: Resource, T: PartialEq + Debug>(&self, expect: T, f: impl FnOnce(&R) -> T) {
         assert_eq!(f(self.resource::<R>()), expect);
     }
-    
-    #[inline]
-    fn assert_resource_exists<R: Resource>(&self) {
-        assert!(self.)
-    }
 }
 
 impl DirectResourceControl for App {
