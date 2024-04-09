@@ -1,7 +1,7 @@
 use bevy::prelude::{Deref, DerefMut, Resource};
 
 #[derive(Default, Debug, Copy, Clone, DerefMut, Deref, Resource, Eq, PartialEq, Ord, PartialOrd, Hash)]
-pub struct Count(usize);
+pub struct Count(pub usize);
 
 impl Count{
     pub fn increment(&mut self) -> usize{
