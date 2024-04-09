@@ -4,8 +4,10 @@ use bevy::app::{App, Plugin};
 use bevy::prelude::{Mut, Resource};
 
 use crate::resource::bool::Bool;
+use crate::resource::count::Count;
 
 pub mod bool;
+mod count;
 
 pub trait DirectResourceControl {
     fn init_resource<R: Resource + Default>(&mut self);
@@ -26,6 +28,11 @@ pub trait DirectResourceControl {
     #[inline]
     fn assert_resource<R: Resource, T: PartialEq + Debug>(&self, expect: T, f: impl FnOnce(&R) -> T) {
         assert_eq!(f(self.resource::<R>()), expect);
+    }
+    
+    #[inline]
+    fn assert_resource_exists<R: Resource>(&self) {
+        assert!(self.)
     }
 }
 
@@ -61,6 +68,7 @@ pub struct BevyTestHelperResourcePlugin;
 impl Plugin for BevyTestHelperResourcePlugin {
     fn build(&self, app: &mut App) {
         app
-            .init_resource::<Bool>();
+            .init_resource::<Bool>()
+            .init_resource::<Count>();
     }
 }
