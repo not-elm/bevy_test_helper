@@ -7,7 +7,7 @@ use crate::resource::bool::Bool;
 use crate::resource::count::Count;
 
 pub mod bool;
-mod count;
+pub mod count;
 
 pub trait DirectResourceControl {
     fn init_resource<R: Resource + Default>(&mut self);
