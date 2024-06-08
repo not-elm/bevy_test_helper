@@ -15,6 +15,14 @@ pub trait DirectEvents {
     fn read_last_event<'a, E: Event>(&'a self, reader: &'a mut ManualEventReader<E>) -> Option<&E> {
         self.read_events(reader).last()
     }
+
+    fn assert_event_comes<'a, E: Event>(&'a self, reader: &'a mut ManualEventReader<E>) {
+        assert!(self.read_last_event(reader).is_some());
+    }
+
+    fn assert_event_not_comes<'a, E: Event>(&'a self, reader: &'a mut ManualEventReader<E>) {
+        assert!(self.read_last_event(reader).is_none());
+    }
 }
 
 impl DirectEvents for World {
