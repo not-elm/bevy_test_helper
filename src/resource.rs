@@ -34,27 +34,27 @@ pub trait DirectResourceControl {
 impl DirectResourceControl for App {
     #[inline]
     fn init_resource<R: Resource + Default>(&mut self) {
-        self.world.init_resource::<R>();
+        self.world_mut().init_resource::<R>();
     }
 
     #[inline]
     fn insert_resource<R: Resource>(&mut self, r: R) {
-        self.world.insert_resource(r);
+        self.world_mut().insert_resource(r);
     }
 
     #[inline]
     fn remove_resource<R: Resource>(&mut self) -> Option<R> {
-        self.world.remove_resource::<R>()
+        self.world_mut().remove_resource::<R>()
     }
 
     #[inline]
     fn resource<R: Resource>(&self) -> &R {
-        self.world.resource::<R>()
+        self.world().resource::<R>()
     }
 
     #[inline]
     fn resource_mut<R: Resource>(&mut self) -> Mut<R> {
-        self.world.resource_mut::<R>()
+        self.world_mut().resource_mut::<R>()
     }
 }
 

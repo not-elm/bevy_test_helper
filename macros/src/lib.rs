@@ -39,6 +39,17 @@ fn functions(trait_item: &mut ItemTrait) -> TokenStream2 {
         })
         .map(|f| {
             let name = &f.sig.ident;
+            let world = match f.sig.inputs.iter().next().unwrap() {
+                FnArg::Receiver(r) => {
+                    if r.mutability.is_some(){
+                        quote!(world_mut())
+                    }else{
+                        quote!(world())
+                    }
+                },
+                _ => {panic!()}
+            };
+
             let inputs = &f.sig.inputs.iter().filter_map(|arg| match arg {
                 FnArg::Typed(pat_type) => {
                     let ident = require_ident(&pat_type.pat).ok()?;
@@ -48,7 +59,7 @@ fn functions(trait_item: &mut ItemTrait) -> TokenStream2 {
             })
                 .collect::<Vec<_>>();
             f.default.replace(syn::parse2(quote!({
-                self.world.#name(#(#inputs)*)
+                self.#world.#name(#(#inputs)*)
             })).unwrap());
             f
         });
