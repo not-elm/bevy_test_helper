@@ -1,5 +1,5 @@
 use bevy::app::{App, Plugin};
-use bevy::ecs::event::{EventId, EventIterator, ManualEventReader};
+use bevy::ecs::event::{EventCursor, EventId, EventIterator};
 use bevy::prelude::{Event, Events, World};
 
 use bevy_test_helper_macro_impl::delegate_app;
@@ -10,17 +10,17 @@ pub trait DirectEvents {
 
     fn send_default<E: Event + Default>(&mut self) -> EventId<E>;
 
-    fn read_events<'a, E: Event>(&'a self, reader: &'a mut ManualEventReader<E>) -> EventIterator<'a, E>;
+    fn read_events<'a, E: Event>(&'a self, reader: &'a mut EventCursor<E>) -> EventIterator<'a, E>;
 
-    fn read_last_event<'a, E: Event>(&'a self, reader: &'a mut ManualEventReader<E>) -> Option<&E> {
+    fn read_last_event<'a, E: Event>(&'a self, reader: &'a mut EventCursor<E>) -> Option<&E> {
         self.read_events(reader).last()
     }
 
-    fn assert_event_comes<'a, E: Event>(&'a self, reader: &'a mut ManualEventReader<E>) {
+    fn assert_event_comes<'a, E: Event>(&'a self, reader: &'a mut EventCursor<E>) {
         assert!(self.read_last_event(reader).is_some());
     }
 
-    fn assert_event_not_comes<'a, E: Event>(&'a self, reader: &'a mut ManualEventReader<E>) {
+    fn assert_event_not_comes<'a, E: Event>(&'a self, reader: &'a mut EventCursor<E>) {
         assert!(self.read_last_event(reader).is_none());
     }
 }
@@ -34,7 +34,7 @@ impl DirectEvents for World {
         self.resource_mut::<Events<E>>().send_default()
     }
 
-    fn read_events<'a, E: Event>(&'a self, reader: &'a mut ManualEventReader<E>) -> EventIterator<'a, E> {
+    fn read_events<'a, E: Event>(&'a self, reader: &'a mut EventCursor<E>) -> EventIterator<'a, E> {
         reader.read(self.resource::<Events<E>>())
     }
 }
