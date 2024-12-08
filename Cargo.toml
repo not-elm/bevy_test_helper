@@ -8,8 +8,8 @@ edition = "2021"
 
 
 [dependencies]
-bevy = { version = "0.15.0-rc.1", default-features = false }
-serde = { version = "1.0.197", features = ["derive"], optional = true }
+bevy = { version = "0.15.0", default-features = false }
+serde = { version = "1.0.215", features = ["derive"], optional = true }
 bevy_test_helper_macro_impl = { path = "macros" }
 
 [features]

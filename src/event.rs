@@ -12,7 +12,7 @@ pub trait DirectEvents {
 
     fn read_events<'a, E: Event>(&'a self, reader: &'a mut EventCursor<E>) -> EventIterator<'a, E>;
 
-    fn read_last_event<'a, E: Event>(&'a self, reader: &'a mut EventCursor<E>) -> Option<&E> {
+    fn read_last_event<'a, E: Event>(&'a self, reader: &'a mut EventCursor<E>) -> Option<&'a E> {
         self.read_events(reader).last()
     }
 
