@@ -6,7 +6,7 @@ use crate::resource::BevyTestHelperResourcePlugin;
 pub mod event;
 pub mod share;
 pub mod resource;
-
+pub mod system;
 
 pub struct BevyTestHelperPlugin;
 
