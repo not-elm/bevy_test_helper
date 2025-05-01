@@ -4,6 +4,11 @@ use bevy_test_helper_macro_impl::delegate_app;
 #[derive(Default, Debug, Resource, Copy, Clone, Deref, DerefMut)]
 pub struct Bool(bool);
 
+impl Bool{
+    pub fn set_true(&mut self){
+        self.0 = true;
+    }    
+}
 
 #[delegate_app]
 pub trait BoolExtension{
