@@ -7,6 +7,7 @@ pub mod event;
 pub mod share;
 pub mod resource;
 pub mod system;
+pub mod error;
 
 pub struct BevyTestHelperPlugin;
 
