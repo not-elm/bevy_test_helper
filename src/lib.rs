@@ -8,6 +8,11 @@ pub mod share;
 pub mod resource;
 pub mod system;
 pub mod error;
+mod trigger;
+
+pub mod prelude{
+    pub use crate::trigger::*;
+}
 
 pub struct BevyTestHelperPlugin;
 
