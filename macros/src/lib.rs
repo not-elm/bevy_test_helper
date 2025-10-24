@@ -27,6 +27,7 @@ fn parse(input: TokenStream) -> syn::Result<TokenStream> {
     Ok(expand.into())
 }
 
+#[allow(clippy::manual_inspect)]
 fn functions(trait_item: &mut ItemTrait) -> TokenStream2 {
     let functions = trait_item
         .items

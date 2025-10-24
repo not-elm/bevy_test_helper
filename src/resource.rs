@@ -18,7 +18,7 @@ pub trait DirectResourceControl {
 
     fn resource<R: Resource>(&self) -> &R;
 
-    fn resource_mut<R: Resource>(&mut self) -> Mut<R>;
+    fn resource_mut<R: Resource>(&mut self) -> Mut<'_, R>;
 
     #[inline]
     fn assert_resource_eq<R: Resource + Debug + PartialEq>(&self, expect: R) {
@@ -53,7 +53,7 @@ impl DirectResourceControl for App {
     }
 
     #[inline]
-    fn resource_mut<R: Resource>(&mut self) -> Mut<R> {
+    fn resource_mut<R: Resource>(&mut self) -> Mut<'_, R> {
         self.world_mut().resource_mut::<R>()
     }
 }
