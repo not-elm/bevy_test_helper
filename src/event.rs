@@ -1,41 +1,49 @@
 use bevy::app::{App, Plugin};
-use bevy::ecs::event::{EventCursor, EventId, EventIterator};
-use bevy::prelude::{Event, Events, World};
-
+use bevy::ecs::message::{MessageCursor, MessageId, MessageIterator};
+use bevy::prelude::{Event, Message, Messages, World};
 use bevy_test_helper_macro_impl::delegate_app;
 
 #[delegate_app]
 pub trait DirectEvents {
-    fn send<E: Event>(&mut self, event: E) -> EventId<E>;
+    fn write<E: Message>(&mut self, event: E) -> MessageId<E>;
 
-    fn send_default<E: Event + Default>(&mut self) -> EventId<E>;
+    fn write_default<E: Message + Default>(&mut self) -> MessageId<E>;
 
-    fn read_events<'a, E: Event>(&'a self, reader: &'a mut EventCursor<E>) -> EventIterator<'a, E>;
+    fn read_messages<'a, E: Message>(
+        &'a self,
+        reader: &'a mut MessageCursor<E>,
+    ) -> MessageIterator<'a, E>;
 
-    fn read_last_event<'a, E: Event>(&'a self, reader: &'a mut EventCursor<E>) -> Option<&'a E> {
-        self.read_events(reader).last()
+    fn read_last_message<'a, E: Message>(
+        &'a self,
+        reader: &'a mut MessageCursor<E>,
+    ) -> Option<&'a E> {
+        self.read_messages(reader).last()
     }
 
-    fn assert_event_comes<'a, E: Event>(&'a self, reader: &'a mut EventCursor<E>) {
-        assert!(self.read_last_event(reader).is_some());
+    fn assert_message_comes<'a, E: Message>(&'a self, reader: &'a mut MessageCursor<E>) {
+        assert!(self.read_last_message(reader).is_some());
     }
 
-    fn assert_event_not_comes<'a, E: Event>(&'a self, reader: &'a mut EventCursor<E>) {
-        assert!(self.read_last_event(reader).is_none());
+    fn assert_message_not_comes<'a, E: Message>(&'a self, reader: &'a mut MessageCursor<E>) {
+        assert!(self.read_last_message(reader).is_none());
     }
 }
 
 impl DirectEvents for World {
-    fn send<E: Event>(&mut self, event: E) -> EventId<E> {
-        self.resource_mut::<Events<E>>().send(event)
+    fn write<E: Message>(&mut self, event: E) -> MessageId<E> {
+        self.resource_mut::<Messages<E>>().write(event)
     }
 
-    fn send_default<E: Event + Default>(&mut self) -> EventId<E> {
-        self.resource_mut::<Events<E>>().send_default()
+    fn write_default<E: Message + Default>(&mut self) -> MessageId<E> {
+        self.resource_mut::<Messages<E>>().write_default()
     }
 
-    fn read_events<'a, E: Event>(&'a self, reader: &'a mut EventCursor<E>) -> EventIterator<'a, E> {
-        reader.read(self.resource::<Events<E>>())
+    fn read_messages<'a, E: Message>(
+        &'a self,
+        reader: &'a mut MessageCursor<E>,
+    ) -> MessageIterator<'a, E> {
+        reader.read(self.resource::<Messages<E>>())
     }
 }
 
@@ -43,26 +51,24 @@ pub struct BevyTestHelperEventsPlugin;
 
 impl Plugin for BevyTestHelperEventsPlugin {
     fn build(&self, app: &mut App) {
-        app
-            .add_event::<TestEvent1>()
-            .add_event::<TestEvent2>()
-            .add_event::<TestEvent3>()
-            .add_event::<TestEvent4>()
-            .add_event::<TestEvent5>()
-            .add_event::<TestEvent6>()
-            .add_event::<TestEvent7>()
-            .add_event::<TestEvent8>()
-            .add_event::<TestEvent9>()
-            .add_event::<TestEvent10>()
-            .add_event::<TestEvent11>()
-            .add_event::<TestEvent12>();
+        app.add_message::<TestEvent1>()
+            .add_message::<TestEvent2>()
+            .add_message::<TestEvent3>()
+            .add_message::<TestEvent4>()
+            .add_message::<TestEvent5>()
+            .add_message::<TestEvent6>()
+            .add_message::<TestEvent7>()
+            .add_message::<TestEvent8>()
+            .add_message::<TestEvent9>()
+            .add_message::<TestEvent10>()
+            .add_message::<TestEvent11>()
+            .add_message::<TestEvent12>();
     }
 }
 
-
 macro_rules! test_event {
     ($name: ident) => {
-        #[derive(Default, Eq, PartialEq, Copy, Clone, Event, Hash, Debug)]
+        #[derive(Default, Eq, PartialEq, Copy, Clone, Message, Hash, Debug, Event)]
         #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
         pub struct $name;
     };
@@ -80,4 +86,3 @@ test_event!(TestEvent9);
 test_event!(TestEvent10);
 test_event!(TestEvent11);
 test_event!(TestEvent12);
-
