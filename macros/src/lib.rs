@@ -2,9 +2,9 @@ use proc_macro::TokenStream;
 
 use proc_macro2::Ident;
 use quote::quote;
-use syn::{FnArg, ItemTrait, Pat, TraitItem};
 use syn::__private::TokenStream2;
 use syn::spanned::Spanned;
+use syn::{FnArg, ItemTrait, Pat, TraitItem};
 
 #[proc_macro_attribute]
 pub fn delegate_app(_: TokenStream, input: TokenStream) -> TokenStream {
@@ -32,36 +32,43 @@ fn functions(trait_item: &mut ItemTrait) -> TokenStream2 {
     let functions = trait_item
         .items
         .iter_mut()
-        .filter_map(|item| {
-            match item {
-                TraitItem::Fn(f) => Some(f),
-                _ => None
-            }
+        .filter_map(|item| match item {
+            TraitItem::Fn(f) => Some(f),
+            _ => None,
         })
         .map(|f| {
             let name = &f.sig.ident;
             let world = match f.sig.inputs.iter().next().unwrap() {
                 FnArg::Receiver(r) => {
-                    if r.mutability.is_some(){
+                    if r.mutability.is_some() {
                         quote!(world_mut())
-                    }else{
+                    } else {
                         quote!(world())
                     }
-                },
-                _ => {panic!()}
+                }
+                _ => {
+                    panic!()
+                }
             };
 
-            let inputs = &f.sig.inputs.iter().filter_map(|arg| match arg {
-                FnArg::Typed(pat_type) => {
-                    let ident = require_ident(&pat_type.pat).ok()?;
-                    Some(quote::quote! {#ident,})
-                }
-                _ => None
-            })
+            let inputs = &f
+                .sig
+                .inputs
+                .iter()
+                .filter_map(|arg| match arg {
+                    FnArg::Typed(pat_type) => {
+                        let ident = require_ident(&pat_type.pat).ok()?;
+                        Some(quote::quote! {#ident,})
+                    }
+                    _ => None,
+                })
                 .collect::<Vec<_>>();
-            f.default.replace(syn::parse2(quote!({
-                self.#world.#name(#(#inputs)*)
-            })).unwrap());
+            f.default.replace(
+                syn::parse2(quote!({
+                    self.#world.#name(#(#inputs)*)
+                }))
+                .unwrap(),
+            );
             f
         });
 

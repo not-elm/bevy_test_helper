@@ -26,7 +26,11 @@ pub trait DirectResourceControl {
     }
 
     #[inline]
-    fn assert_resource<R: Resource, T: PartialEq + Debug>(&self, expect: T, f: impl FnOnce(&R) -> T) {
+    fn assert_resource<R: Resource, T: PartialEq + Debug>(
+        &self,
+        expect: T,
+        f: impl FnOnce(&R) -> T,
+    ) {
         assert_eq!(f(self.resource::<R>()), expect);
     }
 }
@@ -62,8 +66,6 @@ pub struct BevyTestHelperResourcePlugin;
 
 impl Plugin for BevyTestHelperResourcePlugin {
     fn build(&self, app: &mut App) {
-        app
-            .init_resource::<Bool>()
-            .init_resource::<Count>();
+        app.init_resource::<Bool>().init_resource::<Count>();
     }
 }

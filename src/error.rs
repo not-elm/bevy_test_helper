@@ -1,1 +1,1 @@
-pub type TestResult<T=()> = Result<T, Box<dyn std::error::Error>>;
+pub type TestResult<T = ()> = Result<T, Box<dyn std::error::Error>>;

@@ -4,14 +4,14 @@ use bevy_test_helper_macro_impl::delegate_app;
 #[derive(Default, Debug, Resource, Copy, Clone, Deref, DerefMut)]
 pub struct Bool(bool);
 
-impl Bool{
-    pub fn set_true(&mut self){
+impl Bool {
+    pub fn set_true(&mut self) {
         self.0 = true;
-    }    
+    }
 }
 
 #[delegate_app]
-pub trait BoolExtension{
+pub trait BoolExtension {
     fn is_bool_false(&self) -> bool;
 
     fn is_bool_true(&self) -> bool;
@@ -19,8 +19,7 @@ pub trait BoolExtension{
     fn set_bool(&mut self, v: bool);
 }
 
-
-impl BoolExtension for World{
+impl BoolExtension for World {
     #[inline]
     fn is_bool_false(&self) -> bool {
         !self.is_bool_true()

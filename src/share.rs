@@ -1,12 +1,10 @@
-use std::sync::{Arc, Mutex, MutexGuard};
 use bevy::prelude::Resource;
+use std::sync::{Arc, Mutex, MutexGuard};
 
-
-pub fn create_shares<T: Default>() -> (Share<T>, Share<T>){
+pub fn create_shares<T: Default>() -> (Share<T>, Share<T>) {
     let share = Share::<T>::default();
     (share.clone(), share)
 }
-
 
 #[derive(Debug, Default, Resource)]
 pub struct Share<T>(Arc<Mutex<T>>);
@@ -25,11 +23,7 @@ impl<T> Share<T> {
     }
 
     #[inline]
-    pub fn set(&self, t: T){
+    pub fn set(&self, t: T) {
         *self.0.lock().unwrap() = t;
     }
 }
-
-
-
-

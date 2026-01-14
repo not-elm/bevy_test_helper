@@ -3,14 +3,14 @@ use bevy::app::{PluginGroup, PluginGroupBuilder};
 use crate::event::*;
 use crate::resource::BevyTestHelperResourcePlugin;
 
-pub mod event;
-pub mod share;
-pub mod resource;
-pub mod system;
 pub mod error;
+pub mod event;
+pub mod resource;
+pub mod share;
+pub mod system;
 mod trigger;
 
-pub mod prelude{
+pub mod prelude {
     pub use crate::trigger::*;
 }
 
